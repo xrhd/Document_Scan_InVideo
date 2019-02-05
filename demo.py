@@ -54,7 +54,7 @@ def filter_approx(pts):
             dist = [np.linalg.norm(intercection-tr), np.linalg.norm(intercection-bl)]
             distC, distD = max(dist), min(dist)
             
-            if distA/distB < 3 and distC/distD < 3:   
+            if distA/distB < 2. and distC/distD < 2.:   
 
                 widthA = np.sqrt(((br[0] - bl[0]) ** 2) + ((br[1] - bl[1]) ** 2))
                 widthB = np.sqrt(((tr[0] - tl[0]) ** 2) + ((tr[1] - tl[1]) ** 2))
