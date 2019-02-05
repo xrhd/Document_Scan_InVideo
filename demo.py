@@ -15,6 +15,23 @@ from sklearn.cluster import DBSCAN
 import os
 from skimage.io import imsave
 
+
+def line_intersection(line1, line2):
+    xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
+    ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1]) #Typo was here
+
+    def det(a, b):
+        return a[0] * b[1] - a[1] * b[0]
+
+    div = det(xdiff, ydiff)
+    if div == 0:
+       return None
+
+    d = (det(*line1), det(*line2))
+    x = det(d, xdiff) / div
+    y = det(d, ydiff) / div
+    return x, y
+
 def filter_approx(pts):
     """
     return the poins if the rectangle is valid and if its faced to the camerta
@@ -28,19 +45,19 @@ def filter_approx(pts):
         '''faced to the camera'''
         rect = order_points(pts.reshape(4, 2))
         (tl, tr, br, bl) = rect
+        if line_intersection((tl, br), (tr, bl)) != None:
 
-        widthA = np.sqrt(((br[0] - bl[0]) ** 2) + ((br[1] - bl[1]) ** 2))
-        widthB = np.sqrt(((tr[0] - tl[0]) ** 2) + ((tr[1] - tl[1]) ** 2))
-        maxWidth = max(int(widthA), int(widthB))
-        minWidth = min(int(widthA), int(widthB)) + 0.00001
+            widthA = np.sqrt(((br[0] - bl[0]) ** 2) + ((br[1] - bl[1]) ** 2))
+            widthB = np.sqrt(((tr[0] - tl[0]) ** 2) + ((tr[1] - tl[1]) ** 2))
+            maxWidth = max(int(widthA), int(widthB))
+            minWidth = min(int(widthA), int(widthB)) + 0.00001
 
-        heightA = np.sqrt(((tr[0] - br[0]) ** 2) + ((tr[1] - br[1]) ** 2))
-        heightB = np.sqrt(((tl[0] - bl[0]) ** 2) + ((tl[1] - bl[1]) ** 2))
-        maxHeight = max(int(heightA), int(heightB))
-        minHeight = max(int(heightA), int(heightB)) + 0.00001
+            heightA = np.sqrt(((tr[0] - br[0]) ** 2) + ((tr[1] - br[1]) ** 2))
+            heightB = np.sqrt(((tl[0] - bl[0]) ** 2) + ((tl[1] - bl[1]) ** 2))
+            maxHeight = max(int(heightA), int(heightB))
+            minHeight = max(int(heightA), int(heightB)) + 0.00001
 
-        if(maxWidth/minWidth<2.5 and maxHeight/minHeight<2.5):
-            return pts
+            if(maxWidth/minWidth<2.5 and maxHeight/minHeight<2.5): return pts
         
 def detect_document(image):
     """
@@ -147,10 +164,6 @@ def dbscan_filter(scans,  min_samples=50):
     most_common_label = most_common(labels)
     return [scan for label,scan in zip(labels,scans) if label==most_common_label and label>-1]
 
-def save_imgs(imgs):
-    new = time.localtime()
-    os.mkdir(f'{new}')
-    for img in imgs
 
 if __name__ == "__main__":
     '''scan documet from image'''
