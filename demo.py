@@ -15,7 +15,6 @@ from sklearn.cluster import DBSCAN
 import os
 from skimage.io import imsave
 
-
 def line_intersection(line1, line2):
     xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
     ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1]) #Typo was here
@@ -25,7 +24,7 @@ def line_intersection(line1, line2):
 
     div = det(xdiff, ydiff)
     if div == 0:
-       return None
+        return None
 
     d = (det(*line1), det(*line2))
     x = det(d, xdiff) / div
@@ -45,19 +44,29 @@ def filter_approx(pts):
         '''faced to the camera'''
         rect = order_points(pts.reshape(4, 2))
         (tl, tr, br, bl) = rect
-        if line_intersection((tl, br), (tr, bl)) != None:
+        intercection = line_intersection((tl, br), (tr, bl))
+        if intercection != None: # verify the intercection
 
-            widthA = np.sqrt(((br[0] - bl[0]) ** 2) + ((br[1] - bl[1]) ** 2))
-            widthB = np.sqrt(((tr[0] - tl[0]) ** 2) + ((tr[1] - tl[1]) ** 2))
-            maxWidth = max(int(widthA), int(widthB))
-            minWidth = min(int(widthA), int(widthB)) + 0.00001
+            intercection = np.array(intercection)
+            dist = [np.linalg.norm(intercection-tl), np.linalg.norm(intercection-br)]
+            distA, distB = max(dist), min(dist)
 
-            heightA = np.sqrt(((tr[0] - br[0]) ** 2) + ((tr[1] - br[1]) ** 2))
-            heightB = np.sqrt(((tl[0] - bl[0]) ** 2) + ((tl[1] - bl[1]) ** 2))
-            maxHeight = max(int(heightA), int(heightB))
-            minHeight = max(int(heightA), int(heightB)) + 0.00001
+            dist = [np.linalg.norm(intercection-tr), np.linalg.norm(intercection-bl)]
+            distC, distD = max(dist), min(dist)
+            
+            if distA/distB < 3 and distC/distD < 3:   
 
-            if(maxWidth/minWidth<2.5 and maxHeight/minHeight<2.5): return pts
+                widthA = np.sqrt(((br[0] - bl[0]) ** 2) + ((br[1] - bl[1]) ** 2))
+                widthB = np.sqrt(((tr[0] - tl[0]) ** 2) + ((tr[1] - tl[1]) ** 2))
+                maxWidth = max(int(widthA), int(widthB))
+                minWidth = min(int(widthA), int(widthB)) + 0.00001
+
+                heightA = np.sqrt(((tr[0] - br[0]) ** 2) + ((tr[1] - br[1]) ** 2))
+                heightB = np.sqrt(((tl[0] - bl[0]) ** 2) + ((tl[1] - bl[1]) ** 2))
+                maxHeight = max(int(heightA), int(heightB))
+                minHeight = max(int(heightA), int(heightB)) + 0.00001
+
+                if(maxWidth/minWidth<2.5 and maxHeight/minHeight<2.5): return pts
         
 def detect_document(image):
     """
