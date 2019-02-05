@@ -1,12 +1,15 @@
 # Document_Scan_InVideo
 
-    Creat a document scan scistem
+    Creat a document scan scystem
     
 ## requirements
 
     - Jupter
     - Opencv
     - imutils
+    - imutils
+    - sklearn
+    - keras 
     
 ## Materials
 
