@@ -139,7 +139,7 @@ def scan_on_streaming(n_samples=1000):
             if np.any(scaned):
                 if len(scans)>n_samples:
                     scans.pop(0)
-                scans += [imutils.resize(scaned, height = 650)]
+                scans += [scaned]
                     
             '''update the FPS counter'''
             fps.update()
