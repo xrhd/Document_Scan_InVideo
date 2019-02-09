@@ -3,7 +3,7 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-from scan.utils import scan_on_streaming, dbscan_filter
+from scan.utils import *
 from skimage.io import imsave
 
 
@@ -21,7 +21,7 @@ def scan_on_streaming(n_samples=1000):
     # cap.set(cv2.CAP_PROP_AUTOFOCUS, 0) # turn the autofocus off   
     # cap.set(3, 1280) # set the Horizontal resolution
     # cap.set(4, 720) # Set the Vertical resolution
-    time.sleep(2.0)
+    # time.sleep(2.0)
 
     '''start the FPS throughput estimator'''
     fps = FPS().start()
@@ -39,8 +39,7 @@ def scan_on_streaming(n_samples=1000):
             """SCAN FROM FRAME"""
             scaned = scan_from_frame(frame)
             if np.any(scaned):
-                if len(scans)>n_samples:
-                    scans.pop(0)
+                if len(scans)==n_samples:
                     break
                 scans += [scaned]
                     
@@ -66,7 +65,7 @@ def scan_on_streaming(n_samples=1000):
     return scans
 
 
-### MAIN ####
+### MAIN ###
 
 if __name__ == "__main__":
     '''scan documet from image'''
@@ -79,12 +78,14 @@ if __name__ == "__main__":
 
     '''plot the figures'''
     plt.figure(figsize=(15,10))
+    plt.suptitle('less blurry images')
     for i,blurriness in enumerate(less_blurry):
         selected = scans[blurry.index(blurriness)]
         plt.subplot(1,5,(i+1))
-        plt.title(f'less blurry scan: {i+1}')
+        plt.title(f'Doc{i+1}')
         plt.imshow(selected, cmap='gray')
 
         '''save docs into image files'''
         imsave(f'DEMO/doc{i}.png', selected)
+
     plt.show()
