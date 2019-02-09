@@ -121,7 +121,7 @@ def scan_from_frame(frame):
 def dbscan_filter(scans,  min_samples=50):
     '''filter the noise on scaned images'''
     shapes = [scan.shape for scan in scans]
-    db = DBSCAN(eps=20, min_samples=min_samples, metric='euclidean').fit(shapes)
+    db = DBSCAN(eps=20, min_samples=min_samples, metric='euclidean', n_jobs=-1).fit(shapes)
     labels = db.labels_
     def most_common(lst):
         return max(set(lst), key=list(lst).count)
