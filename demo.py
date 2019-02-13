@@ -10,17 +10,18 @@ from imutils.video import WebcamVideoStream, VideoStream
 
 class WebcamVideoStreamer(WebcamVideoStream):
 
-    def __init__(self):
+    def __init__(self, src=0, name="WebcamVideoStream"):
         super().__init__()
         cap = self.stream
-        # cap.set(3, 1280) # set the resolution
-        # cap.set(4, 720)
-        # cap.set(cv2.CAP_PROP_AUTOFOCUS, 0) # turn the autofocus off
-        cap.set(CV_CAP_PROP_SETTINGS, 1)
+        cap.set(3, 1280) # set the resolution
+        cap.set(4, 720)
+        cap.set(cv2.CAP_PROP_AUTOFOCUS, 0) # turn the autofocus off
+        # cap.set(cv2.CV_CAP_PROP_SETTINGS, 1)
 
 class VideoStreamer(VideoStream):
     
-    def __init__(self):
+    def __init__(self, src=0, usePiCamera=False, resolution=(320, 240),
+		framerate=32):
         super().__init__()
         self.stream = WebcamVideoStreamer()
 
