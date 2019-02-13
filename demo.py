@@ -23,7 +23,7 @@ class VideoStreamer(VideoStream):
     def __init__(self, src=0, usePiCamera=False, resolution=(320, 240),
 		framerate=32):
         super().__init__()
-        self.stream = WebcamVideoStreamer()
+        self.stream = WebcamVideoStreamer(src)
 
 
 ### STREAMING CAPITURES  ###
