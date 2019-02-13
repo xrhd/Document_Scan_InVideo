@@ -6,6 +6,23 @@ import matplotlib.pyplot as plt
 from scan.utils import *
 from skimage.io import imsave
 
+from imutils.video import WebcamVideoStream, VideoStream
+
+class WebcamVideoStreamer(WebcamVideoStream):
+
+    def __init__(self):
+        super().__init__()
+        cap = self.stream
+        cap.set(3, 1280) # set the resolution
+        cap.set(4, 720)
+        cap.set(cv2.CAP_PROP_AUTOFOCUS, 0) # turn the autofocus off
+
+class VideoStreamer(VideoStream):
+    
+    def __init__(self):
+        super().__init__()
+        self.stream = WebcamVideoStreamer()
+
 
 ### STREAMING CAPITURES  ###
 
@@ -39,13 +56,12 @@ def scan_on_streaming(n_samples=1000):
             """SCAN FROM FRAME"""
             scaned = scan_from_frame(frame)
             if np.any(scaned):
-                if len(scans)==n_samples:
-                    break
-                scans += [scaned]
-                    
-            '''update the FPS counter'''
-            fps.update()
-            cv2.imshow("Frame", frame)
+                if len(scans)==n_samples: break
+                else:
+                    scans += [scaned]
+                    '''update the FPS counter'''
+                    fps.update()
+                    cv2.imshow("Frame", frame)
             
             '''stop scan'''
             key = cv2.waitKey(1) & 0xFF
