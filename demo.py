@@ -13,9 +13,10 @@ class WebcamVideoStreamer(WebcamVideoStream):
     def __init__(self):
         super().__init__()
         cap = self.stream
-        cap.set(3, 1280) # set the resolution
-        cap.set(4, 720)
-        cap.set(cv2.CAP_PROP_AUTOFOCUS, 0) # turn the autofocus off
+        # cap.set(3, 1280) # set the resolution
+        # cap.set(4, 720)
+        # cap.set(cv2.CAP_PROP_AUTOFOCUS, 0) # turn the autofocus off
+        cap.set(CV_CAP_PROP_SETTINGS, 1)
 
 class VideoStreamer(VideoStream):
     
@@ -33,7 +34,7 @@ def scan_on_streaming(n_samples=1000):
     And from each frame tries to extract the document scan;
     """
     print('[INFO] Starting video stream...')
-    vs = VideoStream(src=0).start()
+    vs = VideoStreamer(src=0).start()
     # cap = vs.stream
     # cap.set(cv2.CAP_PROP_AUTOFOCUS, 0) # turn the autofocus off   
     # cap.set(3, 1280) # set the Horizontal resolution
