@@ -3,27 +3,11 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-from scan.utils import *
 from skimage.io import imsave
 
-from imutils.video import WebcamVideoStream, VideoStream
 
-class WebcamVideoStreamer(WebcamVideoStream):
-
-    def __init__(self, src=0, name="WebcamVideoStream"):
-        super().__init__()
-        cap = self.stream
-        cap.set(3, 1280) # set the resolution
-        cap.set(4, 720)
-        cap.set(cv2.CAP_PROP_AUTOFOCUS, 0) # turn the autofocus off
-        # cap.set(cv2.CV_CAP_PROP_SETTINGS, 1)
-
-class VideoStreamer(VideoStream):
-    
-    def __init__(self, src=0, usePiCamera=False, resolution=(320, 240),
-		framerate=32):
-        super().__init__()
-        self.stream = WebcamVideoStreamer(src)
+from scan.utils import *
+from scan.video import WebcamVideoStreamer, VideoStreamer
 
 
 ### STREAMING CAPITURES  ###
@@ -52,22 +36,22 @@ def scan_on_streaming(n_samples=1000):
     scans = list()
     try:
         while True:
-            '''grab the frame from the threaded video stream'''
-            frame = vs.read()
-            
+            frame = vs.read() # grab the frame from the threaded video stream
+           
             """SCAN FROM FRAME"""
             scaned = scan_from_frame(frame)
             if np.any(scaned):
                 if len(scans)==n_samples: break
-                else:
-                    scans += [scaned]
-                    '''update the FPS counter'''
-                    fps.update()
-                    cv2.imshow("Frame", frame)
+                scans += [scaned]
+            
+            '''update the FPS counter'''
+            fps.update()
+            cv2.imshow("Frame", frame)
             
             '''stop scan'''
             key = cv2.waitKey(1) & 0xFF
             if key == ord("q"): break
+
     except: pass
     finally:
         '''Stop Some processes''' 
