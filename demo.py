@@ -20,11 +20,6 @@ def scan_on_streaming(n_samples=1000):
     """
     print('[INFO] Starting video stream...')
     vs = VideoStreamer(src=0).start()
-    # cap = vs.stream
-    # cap.set(cv2.CAP_PROP_AUTOFOCUS, 0) # turn the autofocus off   
-    # cap.set(3, 1280) # set the Horizontal resolution
-    # cap.set(4, 720) # Set the Vertical resolution
-    # time.sleep(2.0)
 
     '''start the FPS throughput estimator'''
     fps = FPS().start()

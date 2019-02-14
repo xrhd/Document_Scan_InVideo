@@ -19,9 +19,10 @@ class WebcamVideoStreamer:
         # be stopped
         self.stopped = False
         cap = self.stream
+        cap.set(cv2.CAP_PROP_AUTOFOCUS, 0) # turn the autofocus off
         cap.set(3, 1280) # set the resolution
         cap.set(4, 720)
-        cap.set(cv2.CAP_PROP_AUTOFOCUS, 0) # turn the autofocus off
+        
 
     def start(self):
         # start the thread to read frames from the video stream
