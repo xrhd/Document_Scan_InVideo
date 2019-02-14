@@ -20,6 +20,7 @@ def scan_on_streaming(n_samples=1000):
     """
     print('[INFO] Starting video stream...')
     vs = VideoStreamer(src=0).start()
+    time.sleep(0.2)
 
     '''start the FPS throughput estimator'''
     fps = FPS().start()
