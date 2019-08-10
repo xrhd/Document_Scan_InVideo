@@ -49,8 +49,12 @@ def apply_threshold(img, argument):
     }
     return switcher.get(argument, "Invalid method")
 
-for i in range(5):
-    imagem = Image.open(f'doc{i}.png')
-    # phrase = ocr.image_to_string(imagem, lang='por')
-    phrase = get_string(f'doc{i}.png', 18)
-    print(phrase, end='\n\n################\n\n')
+# for i in range(5):
+#     imagem = Image.open(f'doc{i}.png')
+#     phrase = ocr.image_to_string(imagem, lang='por')
+#     # phrase = get_string(f'doc{i}.png', 20)
+#     print(phrase, end='\n\n################\n\n')
+
+imagem = Image.open(f'demo.jpg')
+phrase = ocr.image_to_string(imagem, lang='por')
+print(phrase)

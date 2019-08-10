@@ -7,7 +7,6 @@
     - Jupter
     - Opencv
     - imutils
-    - imutils
     - sklearn
     - keras 
     
